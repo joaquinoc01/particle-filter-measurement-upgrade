@@ -1,40 +1,28 @@
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
+import csv
 
-# Load log
-data = pd.read_csv("build/trajectory_log.csv")
+robot_x = []
+robot_y = []
+estimate_x = []
+estimate_y = []
 
-# Compute RMSE
-rmse = np.sqrt(((data["robot_x"] - data["estimate_x"])**2 + (data["robot_y"] - data["estimate_y"])**2).mean())
-print(f"RMSE between ground truth and estimate: {rmse:.4f}")
+with open('build/trajectory_log.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        robot_x.append(float(row['robot_x']))
+        robot_y.append(float(row['robot_y']))
+        estimate_x.append(float(row['estimate_x']))
+        estimate_y.append(float(row['estimate_y']))
 
-# Plot trajectories
-plt.plot(data["robot_x"], data["robot_y"], label="Robot (Ground Truth)", marker='o')
-plt.plot(data["estimate_x"], data["estimate_y"], label="Estimated (Particle Filter)", marker='x')
-
-# Annotate start points
-plt.annotate("Start", 
-             (data["robot_x"].iloc[0], data["robot_y"].iloc[0]), 
-             textcoords="offset points", 
-             xytext=(-10, 0), 
-             ha='right', 
-             va='center',
-             fontsize=9, 
-             color='blue')
-
-# Optional: highlight start/end with larger markers
-plt.scatter([data["robot_x"].iloc[0]], [data["robot_y"].iloc[0]], color='blue', s=50, edgecolors='black', zorder=5)
-plt.scatter([data["estimate_x"].iloc[0]], [data["estimate_y"].iloc[0]], color='orange', s=50, edgecolors='black', zorder=5)
-
-# Labels & formatting
-plt.xlabel("X Position")
-plt.ylabel("Y Position")
-plt.title("Robot Trajectory vs Particle Filter Estimate")
+plt.figure(figsize=(8, 8))
+plt.plot(robot_x, robot_y, label='Robot True Position', marker='o')
+plt.plot(estimate_x, estimate_y, label='Particle Filter Estimate', marker='x')
+plt.title('Robot Trajectory vs Particle Filter Estimate')
+plt.xlabel('X Position')
+plt.ylabel('Y Position')
 plt.legend()
-plt.axis("equal")
 plt.grid(True)
+plt.axis('equal')
 
-# Save with higher resolution
-plt.savefig("build/trajectory_plot.png", dpi=300)
+plt.savefig('build/trajectory_plot.png')  # Save the plot as PNG in build/
 plt.show()
