@@ -1,40 +1,73 @@
-# Particle Filter with Measurement Upgrade
+# Particle Filter Measurement Upgrade
 
-This project implements a Particle Filter for robot localization in a 2D environment, with a focus on integrating sensor measurement updates using raycasting-based simulated range readings.
+## Overview
 
----
+This project implements a 2D particle filter for robot localization using a range sensor measurement model. It is based on the exercise from Chapter 6 ("Measurement") of *Probabilistic Robotics* by Thrun, Burgard, and Fox (1999). The filter uses ray casting against a map with walls to simulate sensor measurements and updates particle weights accordingly.
 
 ## Features
 
-- **2D Map Representation**: A square environment with defined walls and landmarks.
-- **Robot Model**: Simulates noisy motion (forward movement and rotation) and noisy range measurements to the environment.
-- **Particle Filter**: 
-  - Initialization of particles around the robot’s initial pose.
-  - Motion update with noise applied to rotation and translation.
-  - Measurement update based on raycasting simulated sensor readings.
-  - Weight calculation using a Gaussian sensor model.
-  - Resampling based on effective sample size (Neff) to avoid particle degeneracy.
-- **Pose Estimation**: Uses a weighted mean of particles’ poses (including proper handling of orientation).
+- **Particle filter localization** in 2D with motion and measurement updates.
+- **Ray casting measurement model** to simulate expected sensor ranges for each particle.
+- **Sensor noise modeled with Gaussian distributions.**
+- **Motion model with noisy rotations and translations.**
+- **Adaptive resampling** based on effective sample size (Neff).
+- **Angle normalization** to keep orientation within [0, 2π].
+- **Logging** of robot and estimated trajectories for analysis.
+- **Visualization script** (`plot_trayectory.py`) to plot trajectories.
 
----
+## Upgrades From Initial Measurement Upgrade
 
-## Upgrades from Initial Measurement Upgrade
+- Increased the number of simulated rays from 5 to 19, covering a 180° field of view, improving sensor information and localization accuracy.
+- Added realistic Gaussian noise to sensor measurements.
+- Implemented adaptive resampling triggered when Neff falls below half the number of particles to prevent particle depletion.
+- Improved weight calculation by using log probabilities for numerical stability.
+- Included variance/spread output to monitor particle distribution over time.
 
-- Increased number of simulated rays from 5 to 19 to better capture the sensor’s field of view and improve localization accuracy.
-- Expanded the field of view for raycasting to 180 degrees, evenly distributing rays across this range for more comprehensive environment sensing.
-- Added Gaussian noise to sensor measurements to model realistic sensor behavior.
-- Implemented effective sample size (Neff) based adaptive resampling to maintain particle diversity and filter robustness.
-- Enhanced pose estimation by computing a weighted average over particle orientations using sine and cosine components for better angular averaging.
-- Added detailed logging of robot and estimated poses to CSV for trajectory analysis.
+## How to Build and Run
 
----
+1. Create a build directory and navigate into it:
 
-## Visualization
+       mkdir build
+       cd build
 
-![Map and Particle Filter Visualization](https://github.com/user-attachments/assets/f7600577-82e5-483a-8fd1-947b36043dec)
+2. Run CMake to configure the build:
 
----
+       cmake ..
 
-## References
+3. Compile the project:
 
-- Thrun, S., Burgard, W., & Fox, D. (2005). *Probabilistic Robotics*. MIT Press.
+       make
+
+4. Run the particle filter executable:
+
+       ./particle_filter_measurement_upgrade
+
+5. Return to the root directory:
+
+       cd ..
+
+6. (Optional) Activate your Python virtual environment (if using Ubuntu or similar):
+
+       source venv/bin/activate
+
+7. Run the visualization script to see the results:
+
+       python plot_trayectory.py
+
+## Adding a Trajectory Plot (PNG)
+
+To visualize the particle filter results:
+
+- The executable generates a CSV log file `trajectory_log.csv` containing the robot's true position and the filter's estimated position.
+- Use the provided `plot_trayectory.py` Python script to plot the trajectories.
+- The script outputs a PNG file (e.g., `trajectory_plot.png`) showing the robot’s path and estimated path for easy comparison.
+
+You can replace or add your own PNG images here to document the filter's performance.
+
+## Screenshot
+
+![Particle Filter Trajectory](https://github.com/user-attachments/assets/8c6fcae9-d288-4d01-a6de-26a00d1b3ff1)
+
+## Reference
+
+- S. Thrun, W. Burgard, and D. Fox, *Probabilistic Robotics*, MIT Press, 1999.
