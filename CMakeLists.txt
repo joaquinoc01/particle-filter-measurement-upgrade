@@ -4,21 +4,19 @@ project(ParticleFilter)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find Eigen
-find_package(Eigen3 REQUIRED)
+# Find Eigen3
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 # Include directories
 include_directories(
-    ${EIGEN3_INCLUDE_DIR}
     ${PROJECT_SOURCE_DIR}/include
 )
 
-# Add the executable and source files
+# Gather source files
 file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
+# Add executable
 add_executable(particle_filter_motion_upgrade ${SOURCES})
 
-target_include_directories(particle_filter_motion_upgrade PRIVATE
-    ${EIGEN3_INCLUDE_DIR}
-    ${PROJECT_SOURCE_DIR}/include
-)
+# Link Eigen
+target_link_libraries(particle_filter_motion_upgrade PRIVATE Eigen3::Eigen)
