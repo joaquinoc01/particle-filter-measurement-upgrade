@@ -62,8 +62,6 @@ To visualize the particle filter results:
 - Use the provided `plot_trayectory.py` Python script to plot the trajectories.
 - The script outputs a PNG file (e.g., `trajectory_plot.png`) showing the robot’s path and estimated path for easy comparison.
 
-You can replace or add your own PNG images here to document the filter's performance.
-
 ## Screenshot
 
 ![Particle Filter Trajectory](https://github.com/user-attachments/assets/8c6fcae9-d288-4d01-a6de-26a00d1b3ff1)
