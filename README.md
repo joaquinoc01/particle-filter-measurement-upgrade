@@ -54,7 +54,7 @@ This project implements a 2D particle filter for robot localization using a rang
 
        python plot_trayectory.py
 
-## Adding a Trajectory Plot (PNG)
+## Trajectory Plot (PNG)
 
 To visualize the particle filter results:
 
